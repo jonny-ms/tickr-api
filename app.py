@@ -1,90 +1,46 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-import os
-import uuid
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask
+from flask_restful import Api
+# from flask_marshmallow import Marshmallow
+from flask_jwt_extended import JWTManager
+from db import db
+
+from resources.user import User, UserRegistration, UserLogin
+from resources.position import Portfolio, Position
 
 # Init app
 app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
+api = Api(app)
 
 # Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/tickr'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # JSON Web Token
 app.config['SECRET_KEY'] = 'thisissecret'
 
 # Init db
-db = SQLAlchemy(app)
+db.init_app(app)
+# ma = Marshmallow(app) 
+jwt = JWTManager(app)
 
-# Init db
-ma = Marshmallow(app)
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
-# Portfolio
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50))
+# # User Schema
+# class UserSchema(ma.Schema):
+#     class Meta:
+#         fields = ('id', 'email', 'password')
 
-    def __init__(self, public_id, username, email, password):
-        self.public_id = public_id
-        self.username = username
-        self.email = email
-        self.password = password
+# # Init schema
+# user_schema = UserSchema()
+# users_schema = UserSchema(many=True)
 
-# User Schema
-class UserSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'public_id', 'username', 'email', 'password')
-
-# Init schema
-user_schema = UserSchema()
-
-
-@app.route('/', methods=['GET'])
-def index():
-    # return jsonify({"about": "Hello, World!"})
-    pass
-
-@app.route('/new-user', methods=['GET'])
-def get_new_user_form()
-    pass
-
-@app.route('/new-user', methods=['POST'])
-def create_new_user():
-    # data = request.get_json()
-
-    # hashed_password = generate_password_hash(data['password'], method='sha256')
-
-    # new_user = User(public_id=str(uuid4()), username=data['username'], email=data['email'], password=hashed_password)
-    # db.session.add(new_user)
-    # db.session.commit()
-
-    # return jsonify({"user": new_user})
-    pass
-
-@app.route('/stocks/<string:ticker>', methods=['GET'])
-def get_quote(ticker):
-    # return jsonify({ticker: "results"})
-    pass
-
-@app.route('/watchlist/<string:ticker>', methods=['POST'])
-def add_new_watched_item(ticker)
-    pass
-
-@app.route('/portfolio/<string:ticker>', methods=['GET'])
-def get_new_position_form(ticker):
-    pass
-
-@app.route('/portfolio/<string:ticker>', methods=['POST'])
-def add_new_position(ticker)
-    data = request.get_json()
-
-    pass
+api.add_resource(User, "/user")
+api.add_resource(UserRegistration, "/registration")
+api.add_resource(UserLogin, "/login")
+api.add_resource(Position, '/position/<string:ticker>')
+api.add_resource(Portfolio, '/portfolio')
 
 # Run Server
 if __name__ == '__main__':
