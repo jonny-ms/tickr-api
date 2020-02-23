@@ -1,4 +1,4 @@
-from db import db
+from db import db, ma
 
 class PositionModel(db.Model):
   __tablename__ = 'positions'
@@ -10,7 +10,7 @@ class PositionModel(db.Model):
   date = db.Column(db.String(20), nullable=False) # ??
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-  user = db.relationship('UserModel')
+  user = db.relationship('UserModel', backref='positions')
 
 
   
@@ -20,14 +20,6 @@ class PositionModel(db.Model):
     self.date = date
     self.amount = amount
     self.user_id = user_id
-  
-  def json(self):
-    return {
-      'ticker': self.ticker,
-      'price': self.price,
-      'amount': self.amount,
-      'date': self.date
-    }
 
   def save_to_db(self):
     db.session.add(self)
@@ -36,3 +28,17 @@ class PositionModel(db.Model):
   def delete_from_db(self):
     db.session.delete(self)
     db.session.commit()
+
+
+class PositionSchema(ma.SQLAlchemySchema):
+  class Meta:
+    model = PositionModel
+
+  id = ma.auto_field()
+  ticker = ma.auto_field()
+  price = ma.auto_field()
+  amount = ma.auto_field()
+  date = ma.auto_field()
+
+position_schema = PositionSchema()
+portfolio_schema = PositionSchema(many=True)

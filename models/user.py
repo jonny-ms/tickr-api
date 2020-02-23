@@ -1,4 +1,4 @@
-from db import db
+from db import db, ma
 
 class UserModel(db.Model):
   __tablename__ = 'users'
@@ -26,3 +26,15 @@ class UserModel(db.Model):
   def find_by_id(cls, _id):
       return cls.query.get(_id).first()
 
+
+# User Schema
+class UserSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = UserModel
+
+    id = ma.auto_field()
+    email = ma.auto_field()
+
+# Init schema
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
