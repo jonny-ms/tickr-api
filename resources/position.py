@@ -1,12 +1,15 @@
-from flask import request
+from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt_extended import (jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
-from models.position import PositionModel
+from models.position import PositionModel, position_schema, portfolio_schema
+import datetime
 
 class Position(Resource):
   @jwt_required
-  def get(self, ticker):
-    return {'message': 'Success: {} position requested'.format(ticker)}
+  def get(self, _id):
+    position = PositionModel.query.get(_id)
+    result = position_schema.dump(position)
+    return jsonify(result)
 
   @jwt_required
   def post(self, ticker):
@@ -39,4 +42,7 @@ class Position(Resource):
 class Portfolio(Resource):
   @jwt_required
   def get(self):
-    pass
+    user_id = get_jwt_identity()
+    portfolio = PositionModel.query.filter_by(user_id=user_id).all()
+    result = portfolio_schema.dump(portfolio)
+    return jsonify(result)

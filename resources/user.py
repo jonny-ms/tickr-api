@@ -2,15 +2,13 @@ from flask import request, jsonify
 from flask_restful import Resource
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
-from models.user import UserModel
+from models.user import UserModel, user_schema, users_schema
 
 class User(Resource):
-#   @jwt_required
   def get(self):  
-    # users = UserModel.query.all()
-    # result = users_schema.dump(users)
-    # return jsonify(result)
-    return {'message': 'ok'}
+    users = UserModel.query.all()
+    result = users_schema.dump(users)
+    return jsonify(result)
   
   def post(self):
     pass
