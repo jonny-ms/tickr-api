@@ -15,6 +15,7 @@ flask-restful = "*"
 pymysql = "*"
 flask-jwt-extended = "*"
 aiohttp = "*"
+uwsgi = "*"
 
 [requires]
 python_version = "3.6"
