@@ -3,7 +3,6 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from db import db, ma
 import os
-import config
 
 from resources.user import User, UserRegistration, UserLogin
 from resources.position import Portfolio, Position

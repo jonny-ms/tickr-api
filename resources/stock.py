@@ -1,5 +1,4 @@
 from flask_restful import Resource
-import config
 import os
 import aiohttp
 import asyncio
