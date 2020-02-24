@@ -14,7 +14,6 @@ marshmallow-sqlalchemy = "*"
 flask-restful = "*"
 pymysql = "*"
 flask-jwt-extended = "*"
-requests = "*"
 aiohttp = "*"
 
 [requires]
