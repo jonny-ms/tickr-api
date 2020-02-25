@@ -14,7 +14,7 @@ app = Flask(__name__)
 api = Api(app )
 
 # Database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('CLEARDB_DATABASE_URL', 'mysql+pymysql://root:password@localhost/tickr')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'mysql+pymysql://root:password@localhost/tickr')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # JSON Web Token

@@ -17,6 +17,7 @@ flask-jwt-extended = "*"
 aiohttp = "*"
 uwsgi = "*"
 mysqlclient = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"
