@@ -16,6 +16,7 @@ pymysql = "*"
 flask-jwt-extended = "*"
 aiohttp = "*"
 uwsgi = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.6"
