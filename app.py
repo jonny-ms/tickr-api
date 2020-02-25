@@ -20,14 +20,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # JSON Web Token
 app.config['SECRET_KEY'] = 'thisissecret'
 
-# Init db
-db.init_app(app)
 ma.init_app(app)
 jwt = JWTManager(app)
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 api.add_resource(User, "/user")
 api.add_resource(UserRegistration, "/registration")
@@ -40,4 +34,5 @@ api.add_resource(Watchlist, '/watchlist')
 
 # Run Server
 if __name__ == '__main__':
+    db.init_app(app)
     app.run(debug=True)
