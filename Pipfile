@@ -18,6 +18,8 @@ aiohttp = "*"
 uwsgi = "*"
 mysqlclient = "*"
 psycopg2 = "*"
+cryptography = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"

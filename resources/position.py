@@ -43,6 +43,7 @@ class Portfolio(Resource):
   @jwt_required
   def get(self):
     user_id = get_jwt_identity()
-    portfolio = PositionModel.query.filter_by(user_id=user_id).all()
-    result = portfolio_schema.dump(portfolio)
-    return jsonify(result)
+    query = PositionModel.query.filter_by(user_id=user_id).all()
+    portfolio = portfolio_schema.dump(query)
+
+    return {position['ticker']:position for position in portfolio}

@@ -44,4 +44,4 @@ class Watchlist(Resource):
     tickers = []
     for r in result:
       tickers.append(r['ticker'])
-    return {'watched_tickers': tickers}
+    return jsonify(tickers)

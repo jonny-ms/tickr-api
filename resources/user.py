@@ -24,7 +24,7 @@ class UserRegistration(Resource):
         data = request.get_json()
 
         if UserModel.find_by_email(data['email']):
-            return {'message': 'User {} already exists'.format(data['email'])}
+            return {'message': 'User already exists'}, 409
 
         hashed_password = generate_password_hash(data['password'], method='sha256')
     
@@ -42,23 +42,23 @@ class UserRegistration(Resource):
                 'message': 'User {} was created'.format(data['email']),
                 'access_token': access_token,
                 'refresh_token': refresh_token
-                }
+                }, 201
         except:
             return {'message': 'Something went wrong'}, 500
 
 class UserLogin(Resource):
     def post(self):
         data = request.get_json()
+        print(data)
         current_user = UserModel.find_by_email(data['email'])
 
         if not current_user:
-            return {'message': 'User {} doesn\'t exist'.format(data['username'])}
+            return {'message': 'User not found'}, 401
         
         if check_password_hash(current_user.password, data['password']):
             access_token = create_access_token(identity = current_user.id)
             refresh_token = create_refresh_token(identity = current_user.id)
             return {
-                'message': 'User {} was created'.format(data['email']),
                 'access_token': access_token,
                 'refresh_token': refresh_token
                 }

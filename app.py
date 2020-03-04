@@ -6,7 +6,7 @@ import os
 
 from resources.user import User, UserRegistration, UserLogin
 from resources.position import Portfolio, Position
-from resources.stock import Stock
+from resources.stock import Stock, Stocks
 from resources.watched import Watched, Watchlist
 
 # Init app
@@ -29,6 +29,7 @@ api.add_resource(UserLogin, "/login")
 api.add_resource(Position, '/position/<int:_id>')
 api.add_resource(Portfolio, '/portfolio')
 api.add_resource(Stock, '/stock/<string:ticker>')
+api.add_resource(Stocks, '/stocks')
 api.add_resource(Watched, '/watch/<string:ticker>')
 api.add_resource(Watchlist, '/watchlist')
 
